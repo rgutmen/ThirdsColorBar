@@ -1,0 +1,41 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+	<Version>1.0</Version>
+	<LangVersion>latest</LangVersion>
+	<UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(GITHUB_ACTIONS)' != 'true'">
+		<Exec Command="copy &quot;$(TargetDir)$(TargetFileName)&quot; &quot;$(registry:HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders@Personal)\ATAS\Indicators&quot;" />
+	</Target>
+
+	<ItemGroup>
+		<PackageReference Include="System.Drawing.Common" Version="8.0.0" />
+	</ItemGroup>
+	
+  <ItemGroup>
+    <Reference Include="ATAS.Indicators">
+      <HintPath>libs/ATAS.Indicators.dll</HintPath>
+    </Reference>
+    <Reference Include="ATAS.Indicators.Technical">
+      <HintPath>libs/ATAS.Indicators.Technical.dll</HintPath>
+    </Reference>
+    <Reference Include="OFT.Attributes">
+      <HintPath>libs/OFT.Attributes.dll</HintPath>
+    </Reference>
+    <Reference Include="OFT.Localization">
+      <HintPath>libs/OFT.Localization.dll</HintPath>
+    </Reference>
+    <Reference Include="OFT.Rendering">
+      <HintPath>libs/OFT.Rendering.dll</HintPath>
+    </Reference>
+    <Reference Include="Utils.Common">
+      <HintPath>libs/Utils.Common.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

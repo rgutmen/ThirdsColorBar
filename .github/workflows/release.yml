@@ -1,0 +1,45 @@
+name: Build and Release ColorCandle
+on:
+  push:
+    tags:
+      - 'v*'
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+    
+    - name: Check out repository
+      uses: actions/checkout@v2
+    
+    - name: Set up .NET
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: '8.0'
+    
+    - name: Restore dependencies
+      run: dotnet restore
+    
+    - name: Build application
+      run: dotnet build --configuration Release
+    
+    - name: Publish application
+      run: dotnet publish --configuration Release --output ./out
+    
+    # - name: Verify generated files
+    #   run: |
+    #     echo "Files in bin/Release/net8.0-windows:"
+    #     ls -R ./bin/Release/net8.0-windows
+    #     echo "Files in out/:"
+    #     ls -R ./out
+    
+    - name: Upload colorcandle.dll to Releases
+      uses: ncipollo/release-action@v1
+      with:
+        tag: ${{ github.ref_name }}
+        artifacts: ./out/ColorCandle.dll
+        generateReleaseNotes: false
+        makeLatest: true
+        replacesArtifacts: true
+        token: ${{ secrets.PAT_TOKEN }}
+        updateOnlyUnreleased: false
+        allowUpdates: true
